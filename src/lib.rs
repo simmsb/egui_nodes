@@ -137,7 +137,7 @@ impl Context {
         links: impl IntoIterator<Item = (usize, usize, usize, LinkArgs)>,
         ui: &mut egui::Ui,
     ) -> egui::Response {
-        let rect = ui.available_rect_before_wrap_finite();
+        let rect = ui.available_rect_before_wrap();
         self.canvas_rect_screen_space = rect;
         self.canvas_origin_screen_space = self.canvas_rect_screen_space.min.to_vec2();
         {
@@ -1176,7 +1176,7 @@ impl Context {
             } else {
                 link.start_pin_index
             };
-        self.deleted_link_idx.replace(idx);
+        self.deleted_link_idx.replace(link.id);
     }
 
     fn begin_link_interaction(&mut self, idx: usize) {
@@ -1187,20 +1187,20 @@ impl Context {
                 self.begin_link_detach(idx, self.hovered_pin_index.unwrap());
                 self.click_interaction_state.link_creation.link_creation_type =
                     LinkCreationType::FromDetach;
+            }   else if self.link_detatch_with_modifier_click {
+                    let link = &self.links.pool[idx];
+                    let start_pin = &self.pins.pool[link.start_pin_index];
+                    let end_pin = &self.pins.pool[link.end_pin_index];
+                    let dist_to_start = start_pin.pos.distance(self.mouse_pos);
+                    let dist_to_end = end_pin.pos.distance(self.mouse_pos);
+                    let closest_pin_idx = if dist_to_start < dist_to_end {
+                        link.start_pin_index
+                    } else {
+                        link.end_pin_index
+                    };
+                    self.click_interaction_type = ClickInteractionType::LinkCreation;
+                    self.begin_link_detach(idx, closest_pin_idx);
             }
-        } else if self.link_detatch_with_modifier_click {
-            let link = &self.links.pool[idx];
-            let start_pin = &self.pins.pool[link.start_pin_index];
-            let end_pin = &self.pins.pool[link.end_pin_index];
-            let dist_to_start = start_pin.pos.distance(self.mouse_pos);
-            let dist_to_end = end_pin.pos.distance(self.mouse_pos);
-            let closest_pin_idx = if dist_to_start < dist_to_end {
-                link.start_pin_index
-            } else {
-                link.end_pin_index
-            };
-            self.click_interaction_type = ClickInteractionType::LinkCreation;
-            self.begin_link_detach(idx, closest_pin_idx);
         } else {
             self.begin_link_selection(idx);
         }
@@ -1325,7 +1325,7 @@ pub struct IO {
     pub emulate_three_button_mouse: Modifiers,
 
     // The Modifier that needs to be pressed to detatch a link instead of creating a new one
-    #[derivative(Default(value = "Modifiers::None"))]
+    #[derivative(Default(value = "Modifiers::Alt"))]
     pub link_detatch_with_modifier_click: Modifiers,
 
     // The mouse button that pans the editor. Should probably not be set to Primary.

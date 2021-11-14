@@ -178,12 +178,15 @@ impl LinkBezierData {
             )
             .chain(std::iter::once(self.bezier.3))
             .collect();
-        egui::Shape::Path {
-            points,
-            closed: false,
-            fill: egui::Color32::TRANSPARENT,
-            stroke: stroke.into(),
-        }
+            
+        egui::Shape::Path(
+           egui::epaint::PathShape {
+                points,
+                closed: false,
+                fill: egui::Color32::TRANSPARENT,
+                stroke: stroke.into(),
+           }
+        )
     }
 }
 
