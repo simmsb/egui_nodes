@@ -758,7 +758,7 @@ impl Context {
 
             let start_pin = &self.pins.pool[link.start_pin_index];
             let end_pin = &self.pins.pool[link.end_pin_index];
-
+            
             let link_data = LinkBezierData::get_link_renderable(
                 start_pin.pos,
                 end_pin.pos,
@@ -947,9 +947,6 @@ impl Context {
         duplicate_link: Option<usize>,
     ) -> bool {
         let end_pin = &self.pins.pool[hovered_pin_idx];
-        if start_pin.parent_node_idx == end_pin.parent_node_idx {
-            return false;
-        }
 
         if start_pin.kind == end_pin.kind {
             return false;
@@ -1093,7 +1090,7 @@ impl Context {
                     .click_interaction_state
                     .link_creation
                     .end_pin_index
-                    .map_or(false, |idx| self.hovered_pin_index != Some(idx));
+                    .map_or(false, |idx| self.hovered_pin_index != Some(idx));    
 
                 if snapping_pin_changed && self.snap_link_idx.is_some() {
                     self.begin_link_detach(
