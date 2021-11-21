@@ -764,6 +764,7 @@ impl Context {
                 end_pin.pos,
                 start_pin.kind,
                 self.style.link_line_segments_per_length,
+                self.style.link_bezier_offset_coefficient
             );
             let link_rect = link_data
                 .bezier
@@ -788,6 +789,7 @@ impl Context {
             end_pin.pos,
             start_pin.kind,
             self.style.link_line_segments_per_length,
+            self.style.link_bezier_offset_coefficient
         );
         let link_shape = link.shape.take().unwrap();
         let link_hovered = self.hovered_link_idx == Some(link_idx)
@@ -1028,6 +1030,7 @@ impl Context {
                 *end,
                 start_type,
                 self.style.link_line_segments_per_length,
+                self.style.link_bezier_offset_coefficient
             );
             return link_data.rectangle_overlaps_bezier(rect);
         }
@@ -1116,6 +1119,7 @@ impl Context {
                     end_pos,
                     start_pin.kind,
                     self.style.link_line_segments_per_length,
+                    self.style.link_bezier_offset_coefficient
                 );
                 ui.painter().add(link_data.draw((
                     self.style.link_thickness,
