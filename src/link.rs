@@ -66,15 +66,17 @@ impl PartialEq for LinkData {
         let mut rhs_start = rhs.start_pin_index;
         let mut rhs_end = rhs.end_pin_index;
 
+        // Whats the point of this?
         if lhs_start > lhs_end {
             std::mem::swap(&mut lhs_start, &mut lhs_end);
         }
 
+        // And this?
         if rhs_start > rhs_end {
             std::mem::swap(&mut rhs_start, &mut rhs_end);
         }
 
-        lhs_start == rhs_start && lhs_end == rhs_start
+        lhs_start == rhs_start && lhs_end == rhs_end
     }
 }
 
