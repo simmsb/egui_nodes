@@ -65,13 +65,13 @@ impl PartialEq for LinkData {
         let mut lhs_end = self.end_pin_index;
         let mut rhs_start = rhs.start_pin_index;
         let mut rhs_end = rhs.end_pin_index;
-
-        // Whats the point of this?
+        
+        // Order start and end pin in increasing order
+        // Links are undirected so this is necessary for the equality to hold
         if lhs_start > lhs_end {
             std::mem::swap(&mut lhs_start, &mut lhs_end);
         }
-
-        // And this?
+        // Same for rhs
         if rhs_start > rhs_end {
             std::mem::swap(&mut rhs_start, &mut rhs_end);
         }
