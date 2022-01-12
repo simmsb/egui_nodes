@@ -498,6 +498,7 @@ impl Context {
             title,
             attributes,
             pos: _,
+            inner_content,
             args,
         }: NodeConstructor<'a>,
         ui: &mut egui::Ui,
@@ -521,18 +522,26 @@ impl Context {
                     title_info.replace((titlebar_shape, title_bar_content_rect));
                     ui.add_space(title_space);
                 }
+
                 let outline_shape = ui.painter().add(egui::Shape::Noop);
+
                 for (id, kind, args, attribute) in attributes {
                     let response = ui.allocate_ui(ui.available_size(), attribute);
                     let shape = ui.painter().add(egui::Shape::Noop);
                     let response = response.response.union(response.inner);
                     self.add_attribute(id, kind, args, response, idx, shape);
                 }
-                (title_info, outline_shape)
+
+                if let Some(inner_content) = inner_content {
+                    let _response = ui.allocate_ui(ui.available_size(), inner_content);
+                }
+
+                (title_info, outline_shape, ui.min_size())
             },
         );
         let node = &mut self.nodes.pool[idx];
-        let (title_info, outline_shape) = response.inner;
+        let (title_info, outline_shape, final_outline) = response.inner;
+        node.size = final_outline;
         if let Some((titlebar_shape, title_bar_content_rect)) = title_info {
             node.titlebar_shape.replace(titlebar_shape);
             node.title_bar_content_rect = title_bar_content_rect;

@@ -122,6 +122,8 @@ pub struct NodeConstructor<'a> {
         PinArgs,
         Box<dyn FnOnce(&mut egui::Ui) -> egui::Response + 'a>,
     )>,
+    #[derivative(Debug = "ignore")]
+    pub(crate) inner_content: Option<Box<dyn FnOnce(&mut egui::Ui) -> egui::Response + 'a>>,
     pub(crate) pos: Option<egui::Pos2>,
     pub(crate) args: NodeArgs,
 }
@@ -140,6 +142,12 @@ impl<'a, 'b> NodeConstructor<'a> {
     /// Add a title to a node
     pub fn with_title(&mut self, title: impl FnOnce(&mut egui::Ui) -> egui::Response + 'a) -> &mut Self {
         self.title.replace(Box::new(title));
+        self
+    }
+
+    /// Add an inner content to the node
+    pub fn with_content(mut self, content: impl FnOnce(&mut egui::Ui) -> egui::Response + 'a) -> Self {
+        self.inner_content.replace(Box::new(content));
         self
     }
 
