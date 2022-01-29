@@ -146,7 +146,7 @@ impl<'a, 'b> NodeConstructor<'a> {
     }
 
     /// Add an inner content to the node
-    pub fn with_content(mut self, content: impl FnOnce(&mut egui::Ui) + 'a) -> Self {
+    pub fn with_content(&mut self, content: impl FnOnce(&mut egui::Ui) + 'a) -> &mut Self {
         self.inner_content.replace(Box::new(content));
         self
     }
