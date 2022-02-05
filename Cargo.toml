@@ -14,3 +14,9 @@ derivative = "2.2.0"
 
 [dev-dependencies]
 eframe = { version = "0.16", default-features = false, features = ["default_fonts", "egui_glow"] }
+
+[patch.crates-io]
+egui = { git = "https://github.com/simmsb/egui", rev = "e4e183e7526f2d29e4af316425afd73d2f7e8bb8" }
+eframe = { git = "https://github.com/simmsb/egui", rev = "e4e183e7526f2d29e4af316425afd73d2f7e8bb8" }
+epi = { git = "https://github.com/simmsb/egui", rev = "e4e183e7526f2d29e4af316425afd73d2f7e8bb8" }
+egui_glow = { git = "https://github.com/simmsb/egui", rev = "e4e183e7526f2d29e4af316425afd73d2f7e8bb8" }
