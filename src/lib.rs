@@ -164,6 +164,11 @@ impl Context {
                 self.canvas_rect_screen_space,
                 egui::Layout::top_down(egui::Align::Center),
             );
+            let response = ui.interact(
+                self.canvas_rect_screen_space,
+                ui.id().with("Input"),
+                egui::Sense::click_and_drag(),
+            );
             {
                 let ui = &mut ui;
                 let screen_rect = ui.ctx().input().screen_rect();
@@ -195,11 +200,6 @@ impl Context {
                     }
                 }
             }
-            let response = ui.interact(
-                self.canvas_rect_screen_space,
-                ui.id().with("Input"),
-                egui::Sense::click_and_drag(),
-            );
             {
                 let io = ui.ctx().input();
                 let mouse_pos = if let Some(mouse_pos) = response.hover_pos() {
