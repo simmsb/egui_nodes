@@ -28,7 +28,8 @@ pub fn example_graph(ctx: &mut Context, links: &mut Vec<(usize, usize)>, ui: &mu
                 let mut s = 0.0;
                 ui.add(egui::Slider::new(&mut s, 0.0..=100.0));
                 ui.add(egui::DragValue::new(&mut s));
-            }).response
+            })
+            .response
         })
         .with_input_attribute(
             0,
@@ -54,7 +55,7 @@ pub fn example_graph(ctx: &mut Context, links: &mut Vec<(usize, usize)>, ui: &mu
             .with_output_attribute(4, Default::default(), |ui| ui.label("Output"))
             .with_input_attribute(5, Default::default(), |ui| ui.label("Input")),
     ];
-     
+
     ctx.show(
         nodes,
         links.iter().enumerate().map(|(i, (start, end))| (i, *start, *end, LinkArgs::default())),
@@ -91,10 +92,17 @@ impl epi::App for MyApp {
 
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("My egui Application");
-            egui::Slider::new(&mut self.ctx.style.link_bezier_offset_coefficient.x, 0.0..=1.0_f32).ui(ui);
-            egui::Slider::new(&mut self.ctx.style.link_line_segments_per_length, 0.0..=1.0_f32).ui(ui);
+            egui::Slider::new(
+                &mut self.ctx.style.link_bezier_offset_coefficient.x,
+                0.0..=1.0_f32,
+            )
+            .ui(ui);
+            egui::Slider::new(
+                &mut self.ctx.style.link_line_segments_per_length,
+                0.0..=1.0_f32,
+            )
+            .ui(ui);
             example_graph(&mut self.ctx, &mut self.links, ui);
-
         });
 
         // Resize the native window to be just the size we need it to be:

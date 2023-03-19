@@ -140,7 +140,10 @@ impl<'a, 'b> NodeConstructor<'a> {
     }
 
     /// Add a title to a node
-    pub fn with_title(&mut self, title: impl FnOnce(&mut egui::Ui) -> egui::Response + 'a) -> &mut Self {
+    pub fn with_title(
+        &mut self,
+        title: impl FnOnce(&mut egui::Ui) -> egui::Response + 'a,
+    ) -> &mut Self {
         self.title.replace(Box::new(title));
         self
     }
