@@ -163,6 +163,7 @@ impl Context {
             let mut ui = ui.child_ui(
                 self.canvas_rect_screen_space,
                 egui::Layout::top_down(egui::Align::Center),
+                None,
             );
             let response = ui.interact(
                 self.canvas_rect_screen_space,
@@ -199,8 +200,9 @@ impl Context {
                 }
             }
             {
+                let hover_pos = response.hover_pos();
                 ui.ctx().input(|io| {
-                    let mouse_pos = if let Some(mouse_pos) = response.hover_pos() {
+                    let mouse_pos = if let Some(mouse_pos) = hover_pos {
                         self.mouse_in_canvas = true;
                         mouse_pos
                     } else {
@@ -552,7 +554,7 @@ impl Context {
         }
         node.outline_shape.replace(outline_shape);
         node.rect = response.response.rect.expand2(node.layout_style.padding);
-        if response.response.hovered() {
+        if response.response.contains_pointer() {
             self.node_indices_overlapping_with_mouse.push(idx);
         }
     }

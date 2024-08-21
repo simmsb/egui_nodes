@@ -189,7 +189,7 @@ impl LinkBezierData {
             points,
             closed: false,
             fill: egui::Color32::TRANSPARENT,
-            stroke: stroke.into(),
+            stroke: stroke.into().into(),
         };
         egui::Shape::Path(path_shape)
     }
